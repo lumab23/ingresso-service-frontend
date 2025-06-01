@@ -1,5 +1,6 @@
 // API base URL
-const API_BASE_URL = 'http://localhost:8080/ingressos';
+const API_BASE_URL = 'https://es-gqp3.onrender.com/ingressos';
+
 
 // DOM Elements
 const ticketForm = document.getElementById('ticketForm');
