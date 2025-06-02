@@ -1,5 +1,5 @@
 // API base URL
-const API_BASE_URL = 'https://es-gqp3.onrender.com/ingressos';
+const API_BASE_URL = 'ingresso-microservice-production.up.railway.app';
 
 
 // DOM Elements
