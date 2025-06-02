@@ -59,7 +59,7 @@ const createTicketCard = (ticket) => {
 // Function to load tickets
 const loadTickets = async () => {
     try {
-        const response = await axios.get(`${API_BASE_URL}`);
+        const response = await axios.get(`${API_BASE_URL}/ingressos`);
         ticketsList.innerHTML = '';
         
         if (response.data.length === 0) {
