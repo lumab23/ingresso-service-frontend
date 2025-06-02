@@ -90,7 +90,7 @@ ticketForm.addEventListener('submit', async (e) => {
     };
 
     try {
-        const response = await axios.post(`${API_BASE_URL}`, formData);
+        const response = await axios.post(`${API_BASE_URL}/ingressos`, formData);
         showMessage('Ingresso comprado com sucesso!');
         ticketForm.reset();
         loadTickets();
