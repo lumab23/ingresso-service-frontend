@@ -1,5 +1,5 @@
 // API base URL
-const API_BASE_URL = 'ingresso-microservice-production.up.railway.app';
+const API_BASE_URL = 'https://ingresso-microservice-production.up.railway.app';
 
 
 // DOM Elements
