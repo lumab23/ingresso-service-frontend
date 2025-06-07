@@ -1,5 +1,4 @@
-const API_BASE_URL = 'https://ingresso-microservice-production.up.railway.app';
-const SESSION_API_URL = 'https://sessao-microservice-production.up.railway.app';
+const API_BASE_URL = 'https://ingressos-backend-production.up.railway.app';
 const ticketForm = document.getElementById('ticketForm');
 const ticketsList = document.getElementById('ticketsList');
 const sessaoSelect = document.getElementById('sessao');
@@ -7,7 +6,7 @@ const sessionsGrid = document.getElementById('sessionsGrid');
 
 let sessaoMap = {};
 
-// Add smooth scrolling for navigation links
+
 document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -15,9 +14,9 @@ document.querySelectorAll('.nav-links a').forEach(link => {
         const targetElement = document.getElementById(targetId);
         
         if (targetElement) {
-            // Remove active class from all links
+            
             document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
-            // Add active class to clicked link
+        
             link.classList.add('active');
             
             targetElement.scrollIntoView({ 
@@ -28,7 +27,6 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     });
 });
 
-// Update active link on scroll
 window.addEventListener('scroll', () => {
     const sections = document.querySelectorAll('section');
     const navLinks = document.querySelectorAll('.nav-links a');
@@ -115,8 +113,8 @@ const createSessionCard = (sessao) => {
         <div class="movie-card-content">
             <h3>${sessao.filme.titulo}</h3>
             <p class="director">Diretor: ${sessao.filme.diretor}</p>
-            <p><strong>Data:</strong> ${formatDate(sessao.dataHora)}</p>
-            <p><strong>Sala:</strong> ${sessao.sala}</p>
+            <p><strong>Data:</strong> ${formatDate(sessao.horario)}</p>
+            <p><strong>Sala:</strong> ${sessao.salaId}</p>
             <p class="price">${formatCurrency(sessao.preco)}</p>
             <button class="select-movie" data-sessao-id="${sessao.id}">
                 <i class="fas fa-ticket-alt"></i> Selecionar Sessão
@@ -146,7 +144,7 @@ const selectSession = (sessaoId) => {
 
 const loadSessoes = async () => {
     try {
-        const response = await axios.get(`${SESSION_API_URL}/sessoes`);
+        const response = await axios.get(`${API_BASE_URL}/ingressos/sessoes`);
         const sessoes = response.data;
 
         // Clear existing content
@@ -159,12 +157,12 @@ const loadSessoes = async () => {
         }
 
         sessoes.forEach(sessao => {
-            sessaoMap[sessao.id] = `${sessao.filme.titulo} - ${formatDate(sessao.dataHora)}`;
+            sessaoMap[sessao.id] = `${sessao.filme.titulo} - ${formatDate(sessao.horario)}`;
 
             // Add to select dropdown
             const option = document.createElement('option');
             option.value = sessao.id;
-            option.textContent = `${sessao.filme.titulo} - ${formatDate(sessao.dataHora)} - Sala ${sessao.sala}`;
+            option.textContent = `${sessao.filme.titulo} - ${formatDate(sessao.horario)} - Sala ${sessao.salaId}`;
             sessaoSelect.appendChild(option);
 
             // Add to sessions grid
