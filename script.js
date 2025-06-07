@@ -96,10 +96,10 @@ const createTicketCard = (ticket) => {
     const sessaoInfo = sessaoMap[ticket.sessaoId] || `Sessão ID: ${ticket.sessaoId}`;
 
     card.innerHTML = `
-        <h3>${sessaoInfo}</h3>
-        <p><strong>Assento:</strong> ${ticket.codigoAssento}</p>
-        <p><strong>Status:</strong> ${ticket.status}</p>
-        <p><strong>Data da Compra:</strong> ${formatDate(ticket.dataCompra)}</p>
+        <h3>${ticket.filmeTitulo}</h3>
+        <p><strong>Assento:</strong> ${ticket.assento}</p>
+        <p><strong>Data da Sessão:</strong> ${formatDate(ticket.dataHoraSessao)}</p>
+        <p><strong>Sala:</strong> ${ticket.sala}</p>
         <p class="price">${formatCurrency(ticket.preco)}</p>
     `;
     return card;
@@ -198,9 +198,7 @@ ticketForm.addEventListener('submit', async (e) => {
 
     const formData = {
         sessaoId: sessaoSelect.value,
-        usuarioId: "usuario-teste",
-        codigoAssento: document.getElementById('codigoAssento').value,
-        status: "CONFIRMADO"
+        assento: document.getElementById('codigoAssento').value
     };
 
     try {
