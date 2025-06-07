@@ -6,7 +6,6 @@ const sessionsGrid = document.getElementById('sessionsGrid');
 
 let sessaoMap = {};
 
-
 document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -14,11 +13,8 @@ document.querySelectorAll('.nav-links a').forEach(link => {
         const targetElement = document.getElementById(targetId);
         
         if (targetElement) {
-            
             document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
-        
             link.classList.add('active');
-            
             targetElement.scrollIntoView({ 
                 behavior: 'smooth',
                 block: 'start'
@@ -67,7 +63,6 @@ const formatCurrency = (value) => {
 };
 
 const showMessage = (message, type = 'success') => {
-    // Remove any existing messages first
     const existingMessages = document.querySelectorAll('.success-message, .error-message');
     existingMessages.forEach(msg => msg.remove());
 
@@ -75,7 +70,6 @@ const showMessage = (message, type = 'success') => {
     messageDiv.className = `${type}-message`;
     messageDiv.textContent = message;
 
-    // Find the current section's container
     const currentSection = document.querySelector('section:target, section:first-of-type');
     if (currentSection) {
         const container = currentSection.querySelector('.container');
@@ -93,11 +87,8 @@ const createTicketCard = (ticket) => {
     const card = document.createElement('div');
     card.className = 'ticket-card';
 
-    const sessaoInfo = sessaoMap[ticket.sessaoId] || `Sessão ID: ${ticket.sessaoId}`;
-
     card.innerHTML = `
         <h3>${ticket.filmeTitulo}</h3>
-        <p><strong>Assento:</strong> ${ticket.assento}</p>
         <p><strong>Data da Sessão:</strong> ${formatDate(ticket.dataHoraSessao)}</p>
         <p><strong>Sala:</strong> ${ticket.sala}</p>
         <p class="price">${formatCurrency(ticket.preco)}</p>
@@ -122,7 +113,6 @@ const createSessionCard = (sessao) => {
         </div>
     `;
 
-    // Add click event to the select button
     const selectButton = card.querySelector('.select-movie');
     selectButton.addEventListener('click', () => {
         selectSession(sessao.id);
@@ -132,10 +122,7 @@ const createSessionCard = (sessao) => {
 };
 
 const selectSession = (sessaoId) => {
-    // Set the selected session in the form
     sessaoSelect.value = sessaoId;
-    
-    // Scroll to the ticket form
     document.getElementById('sessoes').scrollIntoView({ 
         behavior: 'smooth',
         block: 'start'
@@ -147,7 +134,6 @@ const loadSessoes = async () => {
         const response = await axios.get(`${API_BASE_URL}/ingressos/sessoes`);
         const sessoes = response.data;
 
-        // Clear existing content
         sessaoSelect.innerHTML = '<option value="">Selecione uma sessão</option>';
         sessionsGrid.innerHTML = '';
 
@@ -159,13 +145,11 @@ const loadSessoes = async () => {
         sessoes.forEach(sessao => {
             sessaoMap[sessao.id] = `${sessao.filme.titulo} - ${formatDate(sessao.horario)}`;
 
-            // Add to select dropdown
             const option = document.createElement('option');
             option.value = sessao.id;
             option.textContent = `${sessao.filme.titulo} - ${formatDate(sessao.horario)} - Sala ${sessao.salaId}`;
             sessaoSelect.appendChild(option);
 
-            // Add to sessions grid
             sessionsGrid.appendChild(createSessionCard(sessao));
         });
     } catch (error) {
@@ -197,8 +181,7 @@ ticketForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const formData = {
-        sessaoId: sessaoSelect.value,
-        assento: document.getElementById('codigoAssento').value
+        sessaoId: sessaoSelect.value
     };
 
     try {
