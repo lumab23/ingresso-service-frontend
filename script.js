@@ -127,7 +127,7 @@ const createSessionCard = (sessao) => {
 
 const selectSession = (sessaoId) => {
     sessaoSelect.value = sessaoId;
-    document.getElementById('sessoes').scrollIntoView({ 
+    document.getElementById('ingressos').scrollIntoView({ 
         behavior: 'smooth',
         block: 'start'
     });
