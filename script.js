@@ -1,4 +1,6 @@
 const API_BASE_URL = 'https://ingressos-backend-production.up.railway.app';
+const SESSAO_API_URL = 'https://cinemasessao-production.up.railway.app';
+
 const ticketForm = document.getElementById('ticketForm');
 const ticketsList = document.getElementById('ticketsList');
 const sessaoSelect = document.getElementById('sessao');
@@ -100,14 +102,15 @@ const createSessionCard = (sessao) => {
     const card = document.createElement('div');
     card.className = 'movie-card';
     
+
     card.innerHTML = `
         <div class="movie-card-content">
             <h3>${sessao.filme.titulo}</h3>
             <p class="director">Diretor: ${sessao.filme.diretor}</p>
-            <p><strong>Data:</strong> ${formatDate(sessao.horario)}</p>
-            <p><strong>Sala:</strong> ${sessao.salaId}</p>
+            <p><strong>Data:</strong> ${formatDate(sessao.dataHora)}</p>
+            <p><strong>Sala:</strong> ${sessao.sala}</p> 
             <p class="price">${formatCurrency(sessao.preco)}</p>
-            <button class="select-movie" data-sessao-id="${sessao.id}">
+            <button class="select-movie" data-sessao-id="${sessao._id}">
                 <i class="fas fa-ticket-alt"></i> Selecionar Sessão
             </button>
         </div>
@@ -115,7 +118,8 @@ const createSessionCard = (sessao) => {
 
     const selectButton = card.querySelector('.select-movie');
     selectButton.addEventListener('click', () => {
-        selectSession(sessao.id);
+        // Corrigido para passar sessao._id
+        selectSession(sessao._id); 
     });
 
     return card;
@@ -131,7 +135,8 @@ const selectSession = (sessaoId) => {
 
 const loadSessoes = async () => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/ingressos/sessoes`);
+        // Chame diretamente a API de sessões
+        const response = await axios.get(`${SESSAO_API_URL}/sessoes`); 
         const sessoes = response.data;
 
         sessaoSelect.innerHTML = '<option value="">Selecione uma sessão</option>';
@@ -143,11 +148,12 @@ const loadSessoes = async () => {
         }
 
         sessoes.forEach(sessao => {
-            sessaoMap[sessao.id] = `${sessao.filme.titulo} - ${formatDate(sessao.horario)}`;
+            // Use os nomes corretos dos campos: sessao._id, sessao.dataHora, sessao.sala
+            sessaoMap[sessao._id] = `${sessao.filme.titulo} - ${formatDate(sessao.dataHora)}`;
 
             const option = document.createElement('option');
-            option.value = sessao.id;
-            option.textContent = `${sessao.filme.titulo} - ${formatDate(sessao.horario)} - Sala ${sessao.salaId}`;
+            option.value = sessao._id; 
+            option.textContent = `${sessao.filme.titulo} - ${formatDate(sessao.dataHora)} - Sala ${sessao.sala}`;
             sessaoSelect.appendChild(option);
 
             sessionsGrid.appendChild(createSessionCard(sessao));
