@@ -149,7 +149,8 @@ const loadSessoes = async () => {
 
         sessoes.forEach(sessao => {
             // Use os nomes corretos dos campos: sessao._id, sessao.dataHora, sessao.sala
-            sessaoMap[sessao._id] = `${sessao.filme.titulo} - ${formatDate(sessao.dataHora)}`;
+            sessaoMap[sessao._id] = `${sessao.filme?.titulo || ''} - ${formatDate(sessao.dataHora)}`;
+
 
             const option = document.createElement('option');
             option.value = sessao._id; 
