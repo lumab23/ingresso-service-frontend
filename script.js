@@ -135,34 +135,38 @@ const selectSession = (sessaoId) => {
 
 const loadSessoes = async () => {
     try {
-        // Chame diretamente a API de sessões
-        const response = await axios.get(`${SESSAO_API_URL}/sessoes`); 
-        const sessoes = response.data;
+        const response = await fetch('https://cinemasessao-production.up.railway.app/sessoes');
+        if (!response.ok) throw new Error('Erro ao carregar sessões');
+        const sessoes = await response.json();
 
-        sessaoSelect.innerHTML = '<option value="">Selecione uma sessão</option>';
-        sessionsGrid.innerHTML = '';
+        const sessaoSelect = document.getElementById('sessao');
+        const sessionsGrid = document.getElementById('sessions-grid');
 
-        if (sessoes.length === 0) {
-            sessionsGrid.innerHTML = '<p class="no-movies">Nenhuma sessão disponível no momento.</p>';
-            return;
-        }
+        sessoes.forEach(async (sessao) => {
+            try {
+                
+                const filmeRes = await fetch(`https://apifilmesback-production.up.railway.app/${sessao.filmeId}`);
+                if (!filmeRes.ok) throw new Error('Erro ao carregar filme');
+                const filme = await filmeRes.json();
 
-        sessoes.forEach(sessao => {
-            // Use os nomes corretos dos campos: sessao._id, sessao.dataHora, sessao.sala
-            sessaoMap[sessao._id] = `${sessao.filme.titulo} - ${formatDate(sessao.dataHora)}`;
+                sessaoMap[sessao._id] = `${filme.titulo} - ${formatDate(sessao.dataHora)}`;
 
-            const option = document.createElement('option');
-            option.value = sessao._id; 
-            option.textContent = `${sessao.filme.titulo} - ${formatDate(sessao.dataHora)} - Sala ${sessao.sala}`;
-            sessaoSelect.appendChild(option);
+                const option = document.createElement('option');
+                option.value = sessao._id;
+                option.textContent = `${filme.titulo} - ${formatDate(sessao.dataHora)} - Sala ${sessao.sala}`;
+                sessaoSelect.appendChild(option);
 
-            sessionsGrid.appendChild(createSessionCard(sessao));
+                sessionsGrid.appendChild(createSessionCard({ ...sessao, filme }));
+
+            } catch (erroFilme) {
+                console.error('Erro ao buscar filme da sessão:', erroFilme);
+            }
         });
     } catch (error) {
         console.error('Erro ao carregar sessões:', error);
-        showMessage('Erro ao carregar sessões disponíveis.', 'error');
     }
 };
+
 
 const loadTickets = async () => {
     try {
