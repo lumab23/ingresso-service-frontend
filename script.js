@@ -207,6 +207,32 @@ ticketForm.addEventListener('submit', async (e) => {
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
+    
+    const hamburgerMenu = document.querySelector('.hamburger-menu');
+    const navLinksContainer = document.querySelector('.nav-links-container');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    hamburgerMenu.addEventListener('click', () => {
+        hamburgerMenu.classList.toggle('active');
+        navLinksContainer.classList.toggle('active');
+    });
+
+    // fecha o menu quando clica em um link
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            hamburgerMenu.classList.remove('active');
+            navLinksContainer.classList.remove('active');
+        });
+    });
+
+    // fecha o menu quando clica fora
+    document.addEventListener('click', (e) => {
+        if (!hamburgerMenu.contains(e.target) && !navLinksContainer.contains(e.target)) {
+            hamburgerMenu.classList.remove('active');
+            navLinksContainer.classList.remove('active');
+        }
+    });
+
     await loadSessoes();
     await loadTickets();
 });
